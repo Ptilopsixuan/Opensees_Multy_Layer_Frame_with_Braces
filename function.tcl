@@ -1,0 +1,108 @@
+# in frame.tcl
+proc hShapeProps {depth width tf tw} {
+    set area [expr {2.0 * $width * $tf + $tw * ($depth - 2.0 * $tf)}]
+    set inertia [expr {
+        2.0 * $width * $tf * pow($depth / 2.0 - $tf / 2.0, 2)
+        + $tw * pow($depth - 2.0 * $tf, 3) / 12.0
+    }]
+    return [list $area $inertia]
+}
+proc tubeProps {width thickness} {
+    set innerWidth [expr {$width - 2.0 * $thickness}]
+    set area [expr {$width * $width - $innerWidth * $innerWidth}]
+    set inertia [expr {pow($width, 4) / 12.0 - pow($innerWidth, 4) / 12.0}]
+    return [list $area $inertia]
+}
+proc addElasticBeamColumn {tag nodeI nodeJ area elasticModulus inertia transfTag stiffnessFactor} {
+    element elasticBeamColumn $tag $nodeI $nodeJ $area [expr {$elasticModulus * $stiffnessFactor}] $inertia $transfTag
+}
+
+
+# in analysis.tcl
+proc cyclicTargets {height driftLevels cyclesPerLevel} {
+    set targets {}
+    foreach drift $driftLevels {
+        set amplitude [expr {$drift * $height}]
+        for {set i 0} {$i < $cyclesPerLevel} {incr i} {
+            lappend targets $amplitude [expr {-$amplitude}] 0.0
+        }
+    }
+    return $targets
+}
+
+proc trussInitialLength {nodeI nodeJ} {
+    set ci [nodeCoord $nodeI]
+    set cj [nodeCoord $nodeJ]
+    set dx [expr {[lindex $cj 0] - [lindex $ci 0]}]
+    set dy [expr {[lindex $cj 1] - [lindex $ci 1]}]
+    return [expr {sqrt($dx * $dx + $dy * $dy)}]
+}
+proc trussDeformation {nodeI nodeJ initialLength} {
+    set ci [nodeCoord $nodeI]
+    set cj [nodeCoord $nodeJ]
+    set ui [nodeDisp $nodeI]
+    set uj [nodeDisp $nodeJ]
+    set xi [expr {[lindex $ci 0] + [lindex $ui 0]}]
+    set yi [expr {[lindex $ci 1] + [lindex $ui 1]}]
+    set xj [expr {[lindex $cj 0] + [lindex $uj 0]}]
+    set yj [expr {[lindex $cj 1] + [lindex $uj 1]}]
+    set currentLength [expr {sqrt(pow($xj - $xi, 2) + pow($yj - $yi, 2))}]
+    return [expr {$currentLength - $initialLength}]
+}
+
+proc braceAxialForce {eleTag} {
+    foreach query {axialForce basicForce localForce} {
+        if {[catch {set response [eleResponse $eleTag $query]}] == 0 && [llength $response] > 0} {
+            return [lindex $response 0]
+        }
+    }
+    return 0.0
+}
+
+proc supportReactionForce {} {
+    reactions
+    set leftFx [nodeReaction 101 1]
+    set rightFx [nodeReaction 105 1]
+    return [expr {-($leftFx + $rightFx)}]
+}
+
+proc writeResponseRows {globalFile braceFile step controlNode controlDof brace1Length brace2Length} {
+    set controlDisp [nodeDisp $controlNode $controlDof]
+    set appliedForce [supportReactionForce]
+
+    set brace1Deformation [trussDeformation 301 302 $brace1Length]
+    set brace2Deformation [trussDeformation 304 303 $brace2Length]
+    set brace1Force [braceAxialForce 3002]
+    set brace2Force [braceAxialForce 3005]
+
+    puts $globalFile "$step,$controlDisp,$appliedForce"
+    puts $braceFile "$step,3002,$brace1Deformation,$brace1Force,3005,$brace2Deformation,$brace2Force"
+    flush $globalFile
+    flush $braceFile
+}
+
+proc analyzeOneStep {controlNode controlDof increment testTolerance maxIterations} {
+    integrator DisplacementControl $controlNode $controlDof $increment
+
+    set strategies [list \
+        [list Newton $testTolerance $maxIterations] \
+        [list NewtonLineSearch [expr {$testTolerance * 10.0}] [expr {$maxIterations * 2}]] \
+        [list ModifiedNewton [expr {$testTolerance * 10.0}] [expr {$maxIterations * 3}]] \
+        [list KrylovNewton [expr {$testTolerance * 10.0}] [expr {$maxIterations * 3}]] \
+    ]
+
+    set ok -1
+    foreach strategy $strategies {
+        lassign $strategy algorithmName tolerance iterations
+        test NormDispIncr $tolerance $iterations
+        algorithm $algorithmName
+        set ok [analyze 1]
+        if {$ok == 0} {
+            break
+        }
+    }
+
+    test NormDispIncr $testTolerance $maxIterations
+    algorithm Newton
+    return $ok
+}
