@@ -1,6 +1,6 @@
 wipe
 model BasicBuilder -ndm 2 -ndf 3
-source function.tcl
+source [file join [file dirname [file normalize [info script]]] "function.tcl"]
 
 # ==================================================
 # ================== Parameters ====================
@@ -54,9 +54,7 @@ node 201 $p $h
 node 202 [expr {$w - $p}] $h
 # brace nodes
 node 301 [expr {$p * cos($braceAngle)}] [expr {$p * sin($braceAngle)}]
-node 302 [expr {$w / 2.0 - $p * cos($braceAngle)}] [expr {$h - $p * sin($braceAngle)}]
-node 303 [expr {$w / 2.0 + $p * cos($braceAngle)}] [expr {$h - $p * sin($braceAngle)}]
-node 304 [expr {$w - $p * cos($braceAngle)}] [expr {$p * sin($braceAngle)}]
+node 302 [expr {$w - $p * cos($braceAngle)}] [expr {$h - $p * sin($braceAngle)}]
 # fix
 fix 101 1 1 0
 fix 105 1 1 0

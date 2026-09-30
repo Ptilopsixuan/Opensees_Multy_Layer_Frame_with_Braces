@@ -1,11 +1,9 @@
-source 3.brace.tcl
-source function.tcl
+source [file join [file dirname [file normalize [info script]]] "3.brace.tcl"]
+source [file join [file dirname [file normalize [info script]]] "function.tcl"]
 
 # Load
 timeSeries Linear 1
-pattern Plain 1 1 {
-    load $controlNode 1.0 0.0 0.0
-}
+pattern Plain 1 1 {load $controlNode 1.0 0.0 0.0}
 # Deformation control
 set driftLevels {0.002 0.005 0.010 0.020}
 set cyclesPerLevel 1
@@ -21,29 +19,21 @@ test NormDispIncr $testTolerance $maxIterations
 algorithm Newton
 integrator DisplacementControl $controlNode $controlDof $maxStepMm
 analysis Static
-
-# cyclicTargets see function.tcl
-set targets [cyclicTargets $frameHeight $driftLevels $cyclesPerLevel]
-set step 0
-set ok 0
-
-puts "analysis.tcl loaded"
-puts "$braceType cyclic example finished."
-
+# Initialization
 set globalFile [open [file join $outputDir global_force_displacement.csv] w]
 set braceFile [open [file join $outputDir brace_force_displacement.csv] w]
 puts $globalFile "step,control_disp_mm,applied_force_N"
-puts $braceFile "step,brace_3002_tag,brace_3002_deformation_mm,brace_3002_force_N,brace_3005_tag,brace_3005_deformation_mm,brace_3005_force_N"
+puts $braceFile "step,brace_tag,brace_deformation_mm,brace_force_N"
 
-set brace3002InitialLength [trussInitialLength 301 302]
-set brace3005InitialLength [trussInitialLength 304 303]
+set step 0
+set ok 0
+set braceInitialLength [trussInitialLength 301 302] 
+# 这个是net diagonal length, 要不要换算
 
-# =============================================================================
-# Cyclic static analysis
-# =============================================================================
+writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $braceInitialLength
 
-writeResponseRows $globalFile $braceFile $step $controlNode $controlDof $brace3002InitialLength $brace3005InitialLength
-
+# cyclicTargets see function.tcl
+set targets [cyclicTargets $frameHeight $driftLevels $cyclesPerLevel]
 foreach target $targets {
     while {1} {
         set current [nodeDisp $controlNode $controlDof]
@@ -59,7 +49,7 @@ foreach target $targets {
             set ok [analyzeOneStep $controlNode $controlDof $increment $testTolerance $maxIterations]
             if {$ok == 0} {
                 incr step
-                writeResponseRows $globalFile $braceFile $step $controlNode $controlDof $brace3002InitialLength $brace3005InitialLength
+                writeResponseRows $globalFile $braceFile $step $controlNode $controlDof $braceTag $braceNodeI $braceNodeJ $braceInitialLength
                 break
             }
 
@@ -76,3 +66,6 @@ foreach target $targets {
 
 close $globalFile
 close $braceFile
+
+puts "analysis.tcl loaded"
+puts "$braceType single-brace cyclic example finished."

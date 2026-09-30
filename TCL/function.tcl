@@ -1,4 +1,6 @@
-# in frame.tcl
+# ==================================================
+# ================== 1.frame.tcl ===================
+# ==================================================
 proc hShapeProps {depth width tf tw} {
     set area [expr {2.0 * $width * $tf + $tw * ($depth - 2.0 * $tf)}]
     set inertia [expr {
@@ -17,8 +19,9 @@ proc addElasticBeamColumn {tag nodeI nodeJ area elasticModulus inertia transfTag
     element elasticBeamColumn $tag $nodeI $nodeJ $area [expr {$elasticModulus * $stiffnessFactor}] $inertia $transfTag
 }
 
-
-# in analysis.tcl
+# ==================================================
+# ================= 4.analysis.tcl =================
+# ==================================================
 proc cyclicTargets {height driftLevels cyclesPerLevel} {
     set targets {}
     foreach drift $driftLevels {
@@ -29,7 +32,7 @@ proc cyclicTargets {height driftLevels cyclesPerLevel} {
     }
     return $targets
 }
-
+# get Brace response
 proc trussInitialLength {nodeI nodeJ} {
     set ci [nodeCoord $nodeI]
     set cj [nodeCoord $nodeJ]
@@ -49,7 +52,6 @@ proc trussDeformation {nodeI nodeJ initialLength} {
     set currentLength [expr {sqrt(pow($xj - $xi, 2) + pow($yj - $yi, 2))}]
     return [expr {$currentLength - $initialLength}]
 }
-
 proc braceAxialForce {eleTag} {
     foreach query {axialForce basicForce localForce} {
         if {[catch {set response [eleResponse $eleTag $query]}] == 0 && [llength $response] > 0} {
@@ -58,29 +60,27 @@ proc braceAxialForce {eleTag} {
     }
     return 0.0
 }
-
+# get Global response
 proc supportReactionForce {} {
     reactions
     set leftFx [nodeReaction 101 1]
     set rightFx [nodeReaction 105 1]
     return [expr {-($leftFx + $rightFx)}]
 }
-
-proc writeResponseRows {globalFile braceFile step controlNode controlDof brace1Length brace2Length} {
+# Write Brace & Global response to CSV files
+proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTag braceNodeI braceNodeJ braceLength} {
     set controlDisp [nodeDisp $controlNode $controlDof]
     set appliedForce [supportReactionForce]
 
-    set brace1Deformation [trussDeformation 301 302 $brace1Length]
-    set brace2Deformation [trussDeformation 304 303 $brace2Length]
-    set brace1Force [braceAxialForce 3002]
-    set brace2Force [braceAxialForce 3005]
+    set braceDeformation [trussDeformation $braceNodeI $braceNodeJ $braceLength]
+    set braceForce [braceAxialForce $braceTag]
 
     puts $globalFile "$step,$controlDisp,$appliedForce"
-    puts $braceFile "$step,3002,$brace1Deformation,$brace1Force,3005,$brace2Deformation,$brace2Force"
+    puts $braceFile "$step,$braceTag,$braceDeformation,$braceForce"
     flush $globalFile
     flush $braceFile
 }
-
+# try Analysis
 proc analyzeOneStep {controlNode controlDof increment testTolerance maxIterations} {
     integrator DisplacementControl $controlNode $controlDof $increment
 

@@ -1,9 +1,10 @@
 # Parameters
 set braceType "brb"
 source [file join [file dirname [file normalize [info script]]] "2.${braceType}.tcl"]
-# path
+
 set scriptDir [file dirname [file normalize [info script]]]
-set outputDir [file join $scriptDir output $braceType]
+set workDir [file dirname $scriptDir]
+set outputDir [file join $workDir output $braceType]
 # puts "outputDir: $outputDir"
 file mkdir $outputDir
 
@@ -17,6 +18,8 @@ recorder Element -file [file join $outputDir brace_axial_force.out] -time -ele 3
 recorder Element -file [file join $outputDir brace_local_force.out] -time -ele 3002 localForce
 
 if { $braceType eq "bflp" } {
+    node 303 [expr {$p * cos($braceAngle)}] [expr {$h - $p * sin($braceAngle)}]
+    node 304 [expr {$w - $p * cos($braceAngle)}] [expr {$p * sin($braceAngle)}]
     addElasticBeamColumn 3004 105 304 $rigidBraceArea $frameElasticModulus $rigidBraceInertia 3 $rigidSegmentStiffnessFactor
     element Truss 3005 304 303 $brbArea 30010
     addElasticBeamColumn 3006 303 104 $rigidBraceArea $frameElasticModulus $rigidBraceInertia 3 $rigidSegmentStiffnessFactor

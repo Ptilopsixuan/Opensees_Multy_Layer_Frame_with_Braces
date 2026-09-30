@@ -1,7 +1,7 @@
 # Parameters
 set targetYieldForce 1000000.0
 # =================================================
-source 1.frame.tcl
+source [file join [file dirname [file normalize [info script]]] "1.frame.tcl"]
 
 # brace material
 set brbFy 288.0
