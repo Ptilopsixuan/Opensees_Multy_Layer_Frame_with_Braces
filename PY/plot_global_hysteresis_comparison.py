@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -10,8 +11,9 @@ import matplotlib.pyplot as plt
 CURRENT_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_ROOT = CURRENT_DIR / "output"
 
-CASE_NAME = "csc"
-CASE_LABEL = "CSC"
+DEFAULT_CASE_NAME = "brb"
+CASE_NAME = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_CASE_NAME
+CASE_LABEL = CASE_NAME.upper()
 
 
 def load_brace_history(case_name: str) -> dict[str, list[tuple[float, float]]]:

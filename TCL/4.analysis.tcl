@@ -1,3 +1,9 @@
+set braceType "brb"
+if {[llength $argv] > 0} {
+    set braceType [lindex $argv 0]
+    set targetYieldForce [lindex $argv 1]
+}
+
 source [file join [file dirname [file normalize [info script]]] "3.brace.tcl"]
 source [file join [file dirname [file normalize [info script]]] "function.tcl"]
 
@@ -5,7 +11,7 @@ source [file join [file dirname [file normalize [info script]]] "function.tcl"]
 timeSeries Linear 1
 pattern Plain 1 1 {load $controlNode 1.0 0.0 0.0}
 # Deformation control
-set driftLevels {0.002 0.005 0.010 0.020 0.030}
+set driftLevels {0.005 0.010 0.015 0.020 0.025 0.030}
 set cyclesPerLevel 1
 set maxStepMm 1.0
 set minStepMm 0.02

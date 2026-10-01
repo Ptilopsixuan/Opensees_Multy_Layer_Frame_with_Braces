@@ -1,5 +1,10 @@
 # Parameters
-set braceType "csc"
+if {![info exists braceType]} {
+    set braceType "brb"
+}
+if {![info exists targetYieldForce]} {
+    set targetYieldForce 1000.0
+}
 source [file join [file dirname [file normalize [info script]]] "2.${braceType}.tcl"]
 
 set scriptDir [file dirname [file normalize [info script]]]
