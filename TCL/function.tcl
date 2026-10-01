@@ -74,9 +74,11 @@ proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTa
 
     set braceDeformation [trussDeformation $braceNodeI $braceNodeJ $braceLength]
     set braceForce [braceAxialForce $braceTag]
+    set braceStrain [expr {$braceDeformation / $braceLength}]
+    # set braceStress [expr {$braceForce / $area}]
 
     puts $globalFile "$step,$controlDisp,$appliedForce"
-    puts $braceFile "$step,$braceTag,$braceDeformation,$braceForce"
+    puts $braceFile "$step,$braceTag,$braceDeformation,$braceForce,$braceStrain"
     flush $globalFile
     flush $braceFile
 }

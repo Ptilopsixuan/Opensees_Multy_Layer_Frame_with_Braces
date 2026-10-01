@@ -23,15 +23,11 @@ analysis Static
 set globalFile [open [file join $outputDir global_force_displacement.csv] w]
 set braceFile [open [file join $outputDir brace_force_displacement.csv] w]
 puts $globalFile "step,control_disp_mm,applied_force_N"
-puts $braceFile "step,brace_tag,brace_deformation_mm,brace_force_N"
-
+puts $braceFile "step,brace_tag,brace_deformation_mm,brace_force_N,brace_strain"
 set step 0
 set ok 0
-# set braceInitialLength [trussInitialLength 301 302] 
-# 这个是net diagonal length, 要不要换算
-
+# step 0, initial state
 writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength
-
 # cyclicTargets see function.tcl
 set targets [cyclicTargets $frameHeight $driftLevels $cyclesPerLevel]
 puts "Cyclic targets: $targets"
