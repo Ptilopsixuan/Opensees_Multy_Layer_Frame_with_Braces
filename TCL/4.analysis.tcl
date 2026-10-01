@@ -5,7 +5,7 @@ source [file join [file dirname [file normalize [info script]]] "function.tcl"]
 timeSeries Linear 1
 pattern Plain 1 1 {load $controlNode 1.0 0.0 0.0}
 # Deformation control
-set driftLevels {0.002 0.005 0.010 0.020 0.030 0.040}
+set driftLevels {0.002 0.005 0.010 0.020 0.030}
 set cyclesPerLevel 1
 set maxStepMm 1.0
 set minStepMm 0.02

@@ -21,14 +21,15 @@ set effectiveElasticModulus [expr {$cscElasticModulus * $netDiagonalLength / $br
 set k1 [expr {$csck1Factor * $effectiveElasticModulus * $targetYieldForce / $cscfy}]
 
 set dFuse [expr {$cscDriftAtFuse * $h * cos($braceAngle)}]
-set Dk2 [expr {($ptLimitStrain * $ptRatio - $lambdaD * $dFuse / $braceLength) * ($netDiagonalLength / $braceLength)}]
-set k2 [expr {($Fpre / $Dk2 / $braceLength) * $braceLength}]
+set epsSlip [expr {$dFuse / $netDiagonalLength}]
+set Dk2 [expr {$ptLimitStrain * $ptRatio - $lambdaD * $dFuse / $braceLength}]
+set k2 [expr {($Fpre / $Dk2 / $braceLength) * ($netDiagonalLength / $braceLength) * $braceLength}]
 
-set ptArea [expr {$k2 * $ptRatio / $cscPTElasticModulus}]
-set ptInitialStress [expr {$Fpre / $ptArea / $cscPTElasticModulus}]
+# set ptArea [expr {$k2 * $ptRatio / $cscPTElasticModulus}]
+# set ptInitialStress [expr {$Fpre / $ptArea / $cscPTElasticModulus}]
 
 set area 1.0
 
-uniaxialMaterial SelfCentering 30010 $k1 $k2 $targetYieldForce [expr {1-$lambdaF}] [expr {$dFuse / $braceLength}]
+uniaxialMaterial SelfCentering 30010 $k1 $k2 $targetYieldForce [expr {1-$lambdaF}] $epsSlip
 
 puts "csc.tcl loaded"
