@@ -15,15 +15,14 @@ set brba2 1.0
 set brba3 0.03
 set brba4 1.0
 
-set area [expr {$targetYieldForce / $brbFy}]
+set area [expr {$targetYieldForce / $brbfy}]
 set energyDissipatingCoreLengthRatio 0.70
-set energyDissipatingCoreLength [expr {$braceLength * $energyDissipatingCoreLengthRatio}]
-set effectiveElasticModulus [expr {$brbElasticModulus * $netDiagonalLength / $energyDissipatingCoreLength}]
+set effectiveElasticModulus [expr {$brbElasticModulus / $energyDissipatingCoreLengthRatio}]
 
-set effectiveE0 [expr {0.191 * $energyDissipatingCoreLength / $netDiagonalLength}]
+set effectiveE0 [expr {0.191 * $energyDissipatingCoreLengthRatio}]
 set m -0.458
 
-uniaxialMaterial Steel02 30011 $brbFy $effectiveElasticModulus $brbBsh $brbR0 $brbCR1 $brbCR2 $brba1 $brba2 $brba3 $brba4
+uniaxialMaterial Steel02 30011 $brbfy $effectiveElasticModulus $brbBsh $brbR0 $brbCR1 $brbCR2 $brba1 $brba2 $brba3 $brba4
 uniaxialMaterial Fatigue 30010 30011 "-E0" $effectiveE0 "-m" $m
 
 puts "brb.tcl loaded"

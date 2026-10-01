@@ -39,18 +39,18 @@ def load_brace_history(case_name: str) -> dict[str, list[tuple[float, float]]]:
     return histories
 
 
-def plot_brace_hysteresis(brace_length: float, transfer_factor: float) -> Path:
+def plot_brace_hysteresis(brace_length: float) -> Path:
     histories = load_brace_history(CASE_NAME)
 
     fig, ax = plt.subplots(figsize=(7, 5), constrained_layout=True)
     colors = ("#2b6cb0", "#c23b22", "#2f855a", "#805ad5")
 
     for index, (brace_tag, history) in enumerate(sorted(histories.items())):
-        deformation_mm = [point[0] * transfer_factor / brace_length * 100 for point in history]
+        deformation_strain = [point[0] / brace_length * 100 for point in history]
         force_kn = [point[1] for point in history]
         label = f"{CASE_LABEL} brace {brace_tag}"
         ax.plot(
-            deformation_mm,
+            deformation_strain,
             force_kn,
             color=colors[index % len(colors)],
             linewidth=1.15,
@@ -76,10 +76,5 @@ if __name__ == "__main__":
     w = 9140
     diagonal_length = (h**2 + w**2) ** 0.5
     net_diagonal_length = diagonal_length - 2.0 * 400.0
-    model_ratio = net_diagonal_length / diagonal_length
-    brace_ratio = 0.85
-    brace_length = diagonal_length * brace_ratio
-    transfer_factor = brace_ratio / model_ratio
-    # transfer_factor = 1
-    saved_path = plot_brace_hysteresis(brace_length, transfer_factor)
+    saved_path = plot_brace_hysteresis(net_diagonal_length)
     print(f"Saved brace hysteresis figure to {saved_path}")

@@ -37,11 +37,9 @@ set p $rigidLength
 set h $frameHeight
 set w $frameWidth
 set diagonalLength [expr {sqrt($h * $h + $w * $w)}]
-# assumed brace length
-set braceRatio 0.85
-set braceLength [expr {$diagonalLength * $braceRatio}]
-# model length of the brace
+# model and brace length
 set netDiagonalLength [expr {$diagonalLength - 2.0 * $p}]
+set braceLength $netDiagonalLength
 set braceAngle [expr {atan2($h, $w)}]
 # Column nodes. 101/105 are fixed bases; 104/108 are top column joints.
 node 101 0.0 0.0

@@ -69,13 +69,13 @@ proc supportReactionForce {} {
     return [expr {-($leftFx + $rightFx)}]
 }
 # Write Brace & Global response to CSV files
-proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTag braceNodeI braceNodeJ netDiagonalLength braceLength} {
+proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTag braceNodeI braceNodeJ netDiagonalLength} {
     set controlDisp [nodeDisp $controlNode $controlDof]
     set appliedForce [supportReactionForce]
 
     set braceDeformation [trussDeformation $braceNodeI $braceNodeJ $netDiagonalLength]
     set braceForce [braceAxialForce $braceTag]
-    set braceStrain [expr {$braceDeformation / $braceLength}]
+    set braceStrain [expr {$braceDeformation / $netDiagonalLength}]
     # set braceStress [expr {$braceForce / $area}]
 
     puts $globalFile "$step,$controlDisp,$appliedForce"

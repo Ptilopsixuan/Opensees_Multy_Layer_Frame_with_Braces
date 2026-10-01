@@ -17,13 +17,12 @@ set ptLength [expr {$ptRatio * $braceLength}]
 set ptLimitStrain [expr {$cscPTfu / $cscPTElasticModulus}]
 set Fpre [expr {(1 + $lambdaF) / 2.0 * $targetYieldForce}]
 
-set effectiveElasticModulus [expr {$cscElasticModulus * $netDiagonalLength / $braceLength}]
-set k1 [expr {$csck1Factor * $effectiveElasticModulus * $targetYieldForce / $cscfy}]
+set k1 [expr {$csck1Factor * $cscElasticModulus * $targetYieldForce / $cscfy}]
 
-set dFuse [expr {$cscDriftAtFuse * $h * cos($braceAngle)}]
-set epsSlip [expr {$dFuse / $netDiagonalLength}]
+set dFuse [expr {$cscDriftAtFuse * $h * cos($braceAngle)} * ($braceLength / $diagonalLength)]
+set epsSlip [expr {$dFuse / $braceLength}]
 set Dk2 [expr {$ptLimitStrain * $ptRatio - $lambdaD * $dFuse / $braceLength}]
-set k2 [expr {($Fpre / $Dk2 / $braceLength) * ($netDiagonalLength / $braceLength) * $braceLength}]
+set k2 [expr {$Fpre / $Dk2}]
 
 # set ptArea [expr {$k2 * $ptRatio / $cscPTElasticModulus}]
 # set ptInitialStress [expr {$Fpre / $ptArea / $cscPTElasticModulus}]
