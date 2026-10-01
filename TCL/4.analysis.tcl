@@ -27,13 +27,14 @@ puts $braceFile "step,brace_tag,brace_deformation_mm,brace_force_N"
 
 set step 0
 set ok 0
-set braceInitialLength [trussInitialLength 301 302] 
+# set braceInitialLength [trussInitialLength 301 302] 
 # 这个是net diagonal length, 要不要换算
 
-writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $braceInitialLength
+writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength
 
 # cyclicTargets see function.tcl
 set targets [cyclicTargets $frameHeight $driftLevels $cyclesPerLevel]
+puts "Cyclic targets: $targets"
 foreach target $targets {
     while {1} {
         set current [nodeDisp $controlNode $controlDof]
@@ -49,7 +50,7 @@ foreach target $targets {
             set ok [analyzeOneStep $controlNode $controlDof $increment $testTolerance $maxIterations]
             if {$ok == 0} {
                 incr step
-                writeResponseRows $globalFile $braceFile $step $controlNode $controlDof $braceTag $braceNodeI $braceNodeJ $braceInitialLength
+                writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength
                 break
             }
 

@@ -33,13 +33,13 @@ proc cyclicTargets {height driftLevels cyclesPerLevel} {
     return $targets
 }
 # get Brace response
-proc trussInitialLength {nodeI nodeJ} {
-    set ci [nodeCoord $nodeI]
-    set cj [nodeCoord $nodeJ]
-    set dx [expr {[lindex $cj 0] - [lindex $ci 0]}]
-    set dy [expr {[lindex $cj 1] - [lindex $ci 1]}]
-    return [expr {sqrt($dx * $dx + $dy * $dy)}]
-}
+# proc trussInitialLength {nodeI nodeJ} {
+#     set ci [nodeCoord $nodeI]
+#     set cj [nodeCoord $nodeJ]
+#     set dx [expr {[lindex $cj 0] - [lindex $ci 0]}]
+#     set dy [expr {[lindex $cj 1] - [lindex $ci 1]}]
+#     return [expr {sqrt($dx * $dx + $dy * $dy)}]
+# }
 proc trussDeformation {nodeI nodeJ initialLength} {
     set ci [nodeCoord $nodeI]
     set cj [nodeCoord $nodeJ]
