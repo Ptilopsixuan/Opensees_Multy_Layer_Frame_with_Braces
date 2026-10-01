@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 CURRENT_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_ROOT = CURRENT_DIR / "output"
 
-CASE_NAME = "brb"
-CASE_LABEL = "BRB"
+CASE_NAME = "csc"
+CASE_LABEL = "CSC"
 
 
 def load_brace_history(case_name: str) -> dict[str, list[tuple[float, float]]]:

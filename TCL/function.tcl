@@ -40,6 +40,7 @@ proc cyclicTargets {height driftLevels cyclesPerLevel} {
 #     set dy [expr {[lindex $cj 1] - [lindex $ci 1]}]
 #     return [expr {sqrt($dx * $dx + $dy * $dy)}]
 # }
+# this func get delta_netDiagonal = delta_brace = delta_brace_core
 proc trussDeformation {nodeI nodeJ initialLength} {
     set ci [nodeCoord $nodeI]
     set cj [nodeCoord $nodeJ]
@@ -68,11 +69,11 @@ proc supportReactionForce {} {
     return [expr {-($leftFx + $rightFx)}]
 }
 # Write Brace & Global response to CSV files
-proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTag braceNodeI braceNodeJ braceLength} {
+proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTag braceNodeI braceNodeJ netDiagonalLength braceLength} {
     set controlDisp [nodeDisp $controlNode $controlDof]
     set appliedForce [supportReactionForce]
 
-    set braceDeformation [trussDeformation $braceNodeI $braceNodeJ $braceLength]
+    set braceDeformation [trussDeformation $braceNodeI $braceNodeJ $netDiagonalLength]
     set braceForce [braceAxialForce $braceTag]
     set braceStrain [expr {$braceDeformation / $braceLength}]
     # set braceStress [expr {$braceForce / $area}]

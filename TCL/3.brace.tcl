@@ -1,5 +1,5 @@
 # Parameters
-set braceType "brb"
+set braceType "csc"
 source [file join [file dirname [file normalize [info script]]] "2.${braceType}.tcl"]
 
 set scriptDir [file dirname [file normalize [info script]]]

@@ -5,7 +5,7 @@ source [file join [file dirname [file normalize [info script]]] "function.tcl"]
 timeSeries Linear 1
 pattern Plain 1 1 {load $controlNode 1.0 0.0 0.0}
 # Deformation control
-set driftLevels {0.002 0.005 0.010 0.020}
+set driftLevels {0.002 0.005 0.010 0.020 0.030 0.040}
 set cyclesPerLevel 1
 set maxStepMm 1.0
 set minStepMm 0.02
@@ -27,7 +27,7 @@ puts $braceFile "step,brace_tag,brace_deformation_mm,brace_force_N,brace_strain"
 set step 0
 set ok 0
 # step 0, initial state
-writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength
+writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength $braceLength
 # cyclicTargets see function.tcl
 set targets [cyclicTargets $frameHeight $driftLevels $cyclesPerLevel]
 puts "Cyclic targets: $targets"
@@ -46,7 +46,7 @@ foreach target $targets {
             set ok [analyzeOneStep $controlNode $controlDof $increment $testTolerance $maxIterations]
             if {$ok == 0} {
                 incr step
-                writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength
+                writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength $braceLength
                 break
             }
 

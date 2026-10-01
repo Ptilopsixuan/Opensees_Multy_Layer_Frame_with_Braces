@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 CURRENT_DIR = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = CURRENT_DIR / "output" / "brb"
+OUTPUT_DIR = CURRENT_DIR / "output" / "csc"
 
 
 def build_model_geometry() -> tuple[dict[int, tuple[float, float]], list[tuple[str, int, int, str, float]]]:

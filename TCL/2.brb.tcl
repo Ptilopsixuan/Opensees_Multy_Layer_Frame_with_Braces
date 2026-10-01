@@ -4,7 +4,7 @@ set targetYieldForce 1000000.0
 source [file join [file dirname [file normalize [info script]]] "1.frame.tcl"]
 
 # brace material
-set brbFy 288.0
+set brbfy 288.0
 set brbElasticModulus 208000.0
 set brbBsh 0.005
 set brbR0 20
@@ -17,7 +17,6 @@ set brba4 1.0
 
 set area [expr {$targetYieldForce / $brbFy}]
 set energyDissipatingCoreLengthRatio 0.70
-set braceLength [expr {$diagonalLength * $braceRatio}]
 set energyDissipatingCoreLength [expr {$braceLength * $energyDissipatingCoreLengthRatio}]
 set effectiveElasticModulus [expr {$brbElasticModulus * $netDiagonalLength / $energyDissipatingCoreLength}]
 

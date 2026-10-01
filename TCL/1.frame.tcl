@@ -24,7 +24,6 @@ set beamTw 7.7
 set rigidTubeWidth 228.6
 set rigidTubeThickness 14.8
 set rigidSegmentStiffnessFactor 10.0
-set braceRatio 0.85
 # Cyclic loading parameters.
 set controlNode 104
 set controlDof 1
@@ -38,6 +37,10 @@ set p $rigidLength
 set h $frameHeight
 set w $frameWidth
 set diagonalLength [expr {sqrt($h * $h + $w * $w)}]
+# assumed brace length
+set braceRatio 0.85
+set braceLength [expr {$diagonalLength * $braceRatio}]
+# model length of the brace
 set netDiagonalLength [expr {$diagonalLength - 2.0 * $p}]
 set braceAngle [expr {atan2($h, $w)}]
 # Column nodes. 101/105 are fixed bases; 104/108 are top column joints.
