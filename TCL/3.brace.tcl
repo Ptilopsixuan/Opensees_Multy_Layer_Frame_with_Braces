@@ -3,7 +3,7 @@ if {![info exists braceType]} {
     set braceType "brb"
 }
 if {![info exists targetYieldForce]} {
-    set targetYieldForce 1000.0
+    set targetYieldForce 1000000.0
 }
 source [file join [file dirname [file normalize [info script]]] "2.${braceType}.tcl"]
 
