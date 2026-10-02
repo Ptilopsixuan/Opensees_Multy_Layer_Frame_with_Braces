@@ -6,6 +6,8 @@ set brbElasticModulus 208000.0
 set brbBsh 0.005
 set brbR0 20
 set brbCR1 0.925
+# set brbR0 24
+# set brbCR1 0.9
 set brbCR2 0.15
 set brba1 0.05
 set brba2 1.0
