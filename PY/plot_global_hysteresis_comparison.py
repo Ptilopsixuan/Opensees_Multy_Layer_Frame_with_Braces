@@ -45,7 +45,7 @@ def plot_brace_hysteresis(brace_length: float) -> Path:
     histories = load_brace_history(CASE_NAME)
 
     fig, ax = plt.subplots(figsize=(7, 5), constrained_layout=True)
-    colors = ("#2b6cb0", "#c23b22", "#2f855a", "#805ad5")
+    colors = ("#2b6cb0", "#c23b22", "#2f855a", "#efe63a", "#805ad5")
 
     for index, (brace_tag, history) in enumerate(sorted(histories.items())):
         deformation_strain = [point[0] / brace_length * 100 for point in history]

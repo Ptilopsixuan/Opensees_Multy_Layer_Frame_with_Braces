@@ -27,7 +27,7 @@ uniaxialMaterial Elastic 30012 [expr {$Es / 10000.0}]
 uniaxialMaterial Parallel 30013 30011 30012
 uniaxialMaterial ElasticPPGap 30014 [expr {$Es * 10000.0}] [expr {-$fuS * 10000.0}] [expr {-$dReserve / $braceLength}]
 uniaxialMaterial Parallel 30015 30013 30014
-uniaxialMaterial ReinforcingSteel 30016 $fyS $fuS $Es [expr {$hS * $Es}] $eshS $euS
+uniaxialMaterial ReinforcingSteel 30016 $fyS $fuS $EsEff [expr {$hS * $EsEff}] [expr {$eshS * $SRatio}] [expr {$euS * $SRatio}]
 uniaxialMaterial Series 30017 30015 30016
 uniaxialMaterial ElasticPPGap 30018 [expr {$Es * 10000.0}] [expr {-$fuS * 10000.0}] 0.0
 uniaxialMaterial Parallel 30019 30017 30018

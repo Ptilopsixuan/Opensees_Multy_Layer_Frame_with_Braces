@@ -83,6 +83,29 @@ proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTa
     flush $globalFile
     flush $braceFile
 }
+# Write BFLP
+proc writeAnalysisResponseRows {globalFile braceFile step controlNode controlDof braceType netDiagonalLength} {
+    if {$braceType eq "bflp"} {
+        set controlDisp [nodeDisp $controlNode $controlDof]
+        set appliedForce [supportReactionForce]
+
+        set braceDeformation [trussDeformation 301 302 $netDiagonalLength]
+        set braceForceI [braceAxialForce 3002]
+        set braceForceJ [braceAxialForce 3005]
+        # Algebraic sum of the two BFLP brace element axialForce responses.
+        set braceForce [expr {$braceForceI - $braceForceJ}]
+        set braceStrain [expr {$braceDeformation / $netDiagonalLength}]
+
+        puts $globalFile "$step,$controlDisp,$appliedForce"
+        puts $braceFile "$step,3002+3005,$braceDeformation,$braceForce,$braceStrain"
+        flush $globalFile
+        flush $braceFile
+        return
+    }
+
+    writeResponseRows $globalFile $braceFile $step $controlNode $controlDof 3002 301 302 $netDiagonalLength
+}
+
 # try Analysis
 proc analyzeOneStep {controlNode controlDof increment testTolerance maxIterations} {
     integrator DisplacementControl $controlNode $controlDof $increment

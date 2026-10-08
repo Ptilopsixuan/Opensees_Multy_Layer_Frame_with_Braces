@@ -6,7 +6,7 @@ set lambdaF [expr {30000.0 / $targetYieldForce}]
 # If change this lambdaF, the parameters should be changed theoretically.
 # puts "lambdaF: $lambdaF"
 set deltaSC 0.025
-set CkRS 4.5
+set CkRS 3.0
 set dFT 3
 
 # ED
