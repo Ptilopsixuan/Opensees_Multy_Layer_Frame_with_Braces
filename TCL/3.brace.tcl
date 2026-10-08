@@ -26,7 +26,7 @@ if { $braceType eq "bflp" } {
     node 303 [expr {$p * cos($braceAngle)}] [expr {$h - $p * sin($braceAngle)}]
     node 304 [expr {$w - $p * cos($braceAngle)}] [expr {$p * sin($braceAngle)}]
     addElasticBeamColumn 3004 105 304 $rigidBraceArea $frameElasticModulus $rigidBraceInertia 3 $rigidSegmentStiffnessFactor
-    element Truss 3005 304 303 $brbArea 30010
+    element Truss 3005 304 303 $area 30010
     addElasticBeamColumn 3006 303 104 $rigidBraceArea $frameElasticModulus $rigidBraceInertia 3 $rigidSegmentStiffnessFactor
     recorder Element -file [file join $outputDir brace_axial_force.out] -time -ele 3005 axialForce
     recorder Element -file [file join $outputDir brace_local_force.out] -time -ele 3005 localForce

@@ -14,10 +14,10 @@ set fyS 212.0
 set fuS 438.0
 set Es 197000.0
 set eyS [expr {$fyS / $Es}]
-set eshS [expr {(1 + 13) * $eyS}]
+set eshS [expr {(1 + 1) * $eyS}]
 set hS 0.011; # Esh / Es
-set euS 0.45
-set SRatio [expr 0.7 / (1 + 0.45)] 
+set euS 0.4
+set SRatio [expr 0.7 / (1 + $euS)] 
 set lS [expr {$braceLength * $SRatio}]
 # This yieldArea won't be used. This theoretical area is a little larger than the used AS.
 set yieldArea [expr {$targetYieldForce / $fyS}]

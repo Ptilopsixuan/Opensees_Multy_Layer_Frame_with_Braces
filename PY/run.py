@@ -24,7 +24,7 @@ def main(case_name: str, targetYieldForce: float) -> None:
 
 
 if __name__ == "__main__":
-	CASE_NAMES = ['lpsc']#'tsc', 'brb', 'csc']
-	targetYieldForce = 1000000
+	CASE_NAMES = ['bflp', 'lpsc','tsc', 'brb', 'csc']
+	targetYieldForce = 700e3
 	for case_name in CASE_NAMES:
 		main(case_name, targetYieldForce)
