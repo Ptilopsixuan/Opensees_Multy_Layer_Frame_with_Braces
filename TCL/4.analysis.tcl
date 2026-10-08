@@ -1,7 +1,13 @@
-set braceType "brb"
-if {[llength $argv] > 0} {
+if {[llength $argv] >= 1} {
     set braceType [lindex $argv 0]
+} else {
+    set braceType "brb"
+}
+
+if {[llength $argv] >= 2} {
     set targetYieldForce [lindex $argv 1]
+} else {
+    set targetYieldForce 1000000.0
 }
 
 source [file join [file dirname [file normalize [info script]]] "3.brace.tcl"]

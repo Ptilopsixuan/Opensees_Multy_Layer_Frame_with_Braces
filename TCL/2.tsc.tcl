@@ -1,7 +1,7 @@
 source [file join [file dirname [file normalize [info script]]] "1.frame.tcl"]
 
 # brace material; assume area = 1
-#10.14006/j.jzjgxb.2024.0207 Table 3
+# 10.14006/j.jzjgxb.2024.0207 Table 3
 set tscfy 288.0
 set tscElasticModulus 208000.0
 set tsck1Factor 3.0
