@@ -13,20 +13,20 @@ set lambdaF 0.03
 set PTRatio 0.75
 
 set ptLength [expr {$PTRatio * $braceLength}]
-set ptLimitStrain [expr {$fuPT / $EPT}]
+set euPT [expr {$fuPT / $EPT}]
 set Fpre [expr {(1 + $lambdaF) / 2.0 * $targetYieldForce}]
 set Ffri [expr {(1 - $lambdaF) / 2.0 * $targetYieldForce}]
 
 set k1 [expr {$k1Factor * $ES * $targetYieldForce / $fy}]
 
 set dFrac [expr {$DriftAtFrac * $h * cos($braceAngle)}]
-set Dk2 [expr {2.0 * $ptLimitStrain * $PTRatio - $dFrac / $braceLength}]
+set Dk2 [expr {2.0 * $euPT * $PTRatio - $dFrac / $braceLength}]
 set k2 [expr {$Fpre / $Dk2}]
 
 set ptArea [expr {$k2 * $PTRatio / $EPT}]
 set ePTInit [expr {$Fpre / $ptArea / $EPT / 2.0}]
 set eyS [expr {$targetYieldForce / $k1}]
-set eFracture [expr {($ptLimitStrain - $ePTInit) * 2.0 * $ptLength / $braceLength}]
+set eFracture [expr {($euPT - $ePTInit) * 2.0 * $ptLength / $braceLength}]
 set FPTMax [expr {$Fpre + (0.1 - $eyS) * $k2}]
 
 set ptStrains [list [expr {-0.1}] [expr {-$eyS}] 0.0 [expr {$eyS}] 0.1]

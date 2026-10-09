@@ -14,7 +14,7 @@ set lambdaD 1.15
 set PTRatio 0.75
 
 set ptLength [expr {$PTRatio * $braceLength}]
-set ptLimitStrain [expr {$fuPT / $EPT}]
+set euPT [expr {$fuPT / $EPT}]
 set Fpre [expr {(1 + $lambdaF) / 2.0 * $targetYieldForce}]
 
 set k1 [expr {$k1Factor * $ES * $targetYieldForce / $fy}]
@@ -22,7 +22,7 @@ set k1 [expr {$k1Factor * $ES * $targetYieldForce / $fy}]
 # set dFuse [expr {$driftAtFuse * $h * cos($braceAngle)} * ($braceLength / $diagonalLength)]
 set dFuse [expr {$driftAtFuse * $h * cos($braceAngle)}]
 set eSlip [expr {$dFuse / $braceLength}]
-set Dk2 [expr {$ptLimitStrain * $PTRatio - $lambdaD * $dFuse / $braceLength}]
+set Dk2 [expr {$euPT * $PTRatio - $lambdaD * $dFuse / $braceLength}]
 set k2 [expr {$Fpre / $Dk2}]
 
 # set ptArea [expr {$k2 * $PTRatio / $EPT}]
