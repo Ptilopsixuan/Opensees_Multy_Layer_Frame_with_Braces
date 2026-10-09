@@ -5,9 +5,10 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-
+# KIND = "bflp"
+KIND = "brb"
 CURRENT_DIR = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = CURRENT_DIR / "output" / "csc"
+OUTPUT_DIR = CURRENT_DIR / "output" / KIND
 
 
 def build_model_geometry() -> tuple[dict[int, tuple[float, float]], list[tuple[str, int, int, str, float]]]:
@@ -50,6 +51,17 @@ def build_model_geometry() -> tuple[dict[int, tuple[float, float]], list[tuple[s
         ("3002", 301, 302, "#c23b22", 3.0),
         ("3003", 302, 108, "#2b6cb0", 3.0),
     ]
+
+    if KIND == "bflp":
+        nodes.update({
+            303: (p * math.cos(brace_angle), h - p * math.sin(brace_angle)),
+            304: (w - p * math.cos(brace_angle), p * math.sin(brace_angle)),
+        })
+        elements.extend([
+            ("3004", 105, 304, "#2b6cb0", 3.0),
+            ("3005", 304, 303, "#c23b22", 3.0),
+            ("3006", 303, 104, "#2b6cb0", 3.0),
+        ])
 
     return nodes, elements
 
