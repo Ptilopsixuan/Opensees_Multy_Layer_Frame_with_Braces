@@ -4,12 +4,13 @@ import subprocess
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 TCL_EXE = PROJECT_ROOT / "openseeschuckv2"
-TCL_SCRIPT = PROJECT_ROOT / "TCL" / "4.analysis.tcl"
+BRACE_HYSTERESIS_DIR = PROJECT_ROOT / "1.brace hysteresis"
+TCL_SCRIPT = BRACE_HYSTERESIS_DIR / "TCL" / "4.analysis.tcl"
 PYTHON_EXE = Path(r"C:\Users\Ptilopsis\miniconda3\python.exe")
-PLOT_SCRIPT = PROJECT_ROOT / "PY" / "plot_global_hysteresis_comparison.py"
-PLOT_ALL_SCRIPT = PROJECT_ROOT / "PY" / "plot_all_brace_hysteresis.py"
+PLOT_SCRIPT = BRACE_HYSTERESIS_DIR / "PY" / "plot_global_hysteresis_comparison.py"
+PLOT_ALL_SCRIPT = BRACE_HYSTERESIS_DIR / "PY" / "plot_all_brace_hysteresis.py"
 
 def run_command(command: list[str], *, cwd: Path) -> None:
 	print("Running:", " ".join(command))
