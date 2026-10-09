@@ -83,7 +83,7 @@ proc writeResponseRows {globalFile braceFile step controlNode controlDof braceTa
     flush $globalFile
     flush $braceFile
 }
-# Write BFLP
+# Specialized for this simulation
 proc writeAnalysisResponseRows {globalFile braceFile step controlNode controlDof braceType netDiagonalLength} {
     if {$braceType eq "bflp"} {
         set controlDisp [nodeDisp $controlNode $controlDof]

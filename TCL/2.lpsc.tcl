@@ -12,10 +12,10 @@ set dFT 3
 # ED
 set fyS 212.0
 set fuS 438.0
-set Es 197000.0
-set eyS [expr {$fyS / $Es}]
+set ES 197000.0
+set eyS [expr {$fyS / $ES}]
 set eshS [expr {(1 + 1) * $eyS}]
-set hS 0.011; # Esh / Es
+set hS 0.011; # ESh / ES
 set euS 0.4
 set SRatio [expr 0.7 / (1 + $euS)] 
 set lS [expr {$braceLength * $SRatio}]
@@ -49,7 +49,7 @@ set APT [expr {$kPT * $lPT / $EPT}]
 set k1 [expr {($targetYieldForce - $Fpre) / $eyS / $lS * $CkRS / ($CkRS + 1.0)}]
 set k3 [expr {$kPT * $kSpr / ($kPT + $kSpr)}]
 set kS [expr {($k1 - $k3) * ($CkRS + 1.0) / $CkRS}]
-set AS [expr {$kS * $lS / $Es}]
+set AS [expr {$kS * $lS / $ES}]
 set FyPT [expr {$APT * $fyPT}]
 set fpre [expr {$Fpre / $APT}]
 set fuSpr [expr {$FuSpr / $APT}]
@@ -66,25 +66,26 @@ uniaxialMaterial Series 30013 30011 30012
 
 # ED
 ## Ratchet
-uniaxialMaterial Ratchet 30016 [expr {$CkRS * $Es}] [expr {$dFT / $lS}]
-uniaxialMaterial Elastic 30017 [expr {$Es / 10000.0}]
+uniaxialMaterial Ratchet 30016 [expr {$CkRS * $ES}] [expr {$dFT / $lS}]
+uniaxialMaterial Elastic 30017 [expr {$ES / 10000.0}]
 uniaxialMaterial Parallel 30018 30016 30017
 ## ED steel
-uniaxialMaterial ReinforcingSteel 30019 $fyS $fuS $Es [expr {$hS * $Es}] $eshS $euS
+uniaxialMaterial ReinforcingSteel 30019 $fyS $fuS $ES [expr {$hS * $ES}] $eshS $euS
 uniaxialMaterial MinMax 30020 30019 -max $euS
-uniaxialMaterial Elastic 30021 [expr {$Es / 10000.0}]
+uniaxialMaterial Elastic 30021 [expr {$ES / 10000.0}]
 uniaxialMaterial Parallel 30022 30020 30021
 
 uniaxialMaterial Series 30023 30018 30022
 
-uniaxialMaterial LPSCED 30010 $PTRatio $SRatio [expr {$APT / $AS}] 30013 30023
+# uniaxialMaterial LPSCED 30010 $PTRatio $SRatio [expr {$APT / $AS}] 30013 30023
 # =====================================================================
-# set Dopen [expr {$lambdaF * $lS * $fyS / $Es / 3}]
-# set eopen [expr {$Dopen / $lPT}]
-# set fadj [expr {$fpre - $k3 * $Dopen / $APT}]
-# uniaxialMaterial ElasticBilin 30014 [expr {$fadj / $eopen}] [expr {$EPT/10000.0}] $eopen
-# uniaxialMaterial Parallel 30015 30013 30014
-# uniaxialMaterial LPSCED 30010 $PTRatio $SRatio [expr {$APT / $AS}] 30015 30023
+# the following materials is used to supplement the yield Force
+set Dopen [expr {$lambdaF * $lS * $fyS / $ES / 3}]
+set eopen [expr {$Dopen / $lPT}]
+set fadj [expr {$fpre - $k3 * $Dopen / $APT}]
+uniaxialMaterial ElasticBilin 30014 [expr {$fadj / $eopen}] [expr {$EPT/10000.0}] $eopen
+uniaxialMaterial Parallel 30015 30013 30014
+uniaxialMaterial LPSCED 30010 $PTRatio $SRatio [expr {$APT / $AS}] 30015 30023
 # =====================================================================
 
 # puts "not used yieldArea: $yieldArea"
