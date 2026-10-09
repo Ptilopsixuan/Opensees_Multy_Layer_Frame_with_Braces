@@ -2,6 +2,10 @@
 
 - This project uses Opensees to analyze the hysteresis behavior of different kinds of braces (including brb, csc, tsc, lpsc, and bflp) in a frame structural system.
 
+- parameters reference: [周颖, 肖意, 顾安琪. 自复位支撑-摇摆框架结构体系及其基于位移抗震设计方法](https://doi.org/10.14006/j.jzjgxb.2019.0070)
+- csc & tsc reference: [Xiao, Eberhard, Zhou. Proportioning of self-centering energy dissipative braces](https://doi.org/10.1002/eqe.3463)
+- lpsc reference: [Xiao, Eberhard, Zhou. Low-prestressing, self-centering energy dissipative brace](https://doi.org/10.1002/eqe.3704)
+
 ## 1.brace hysteresis
 
 - This folder is for making sure that the hysteresis behavior of different kinds of braces is typical. Just need to run the run.py in the PY folder.
